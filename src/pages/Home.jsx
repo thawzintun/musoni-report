@@ -60,7 +60,7 @@ const Home = () => {
                                             (new Date(data.maturityDate) -
                                                 currentDate) /
                                                 oneDay
-                                        ) + 1
+                                        )
                                     );
                                     const futureInterest =
                                         (((data.nominalAnnualInterestRate /
