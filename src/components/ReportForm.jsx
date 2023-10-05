@@ -15,7 +15,7 @@ const ReportForm = ({ csvData }) => {
                 <button className=" border px-4 py-2 border-black hover:bg-gray-300 active:bg-gray-400 hover:border-gray-300 active:border-gray-400">
                     Run Report
                 </button>
-                {csvData && csvData.length > 1 && (
+                {csvData && csvData.length > 2 && (
                     <CSVLink
                         className=" border px-4 py-2 border-black bg-black text-white hover:opacity-50 active:opacity-75 "
                         filename="report.csv"

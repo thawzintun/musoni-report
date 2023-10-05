@@ -4,7 +4,7 @@ import { useActionData } from "react-router-dom";
 
 const Home = () => {
     const actionData = useActionData();
-    var currentDate = new Date(Date.now());
+    var currentDate = new Date();
     const tableHead = [
         "Client ID",
         "Client Name",
@@ -22,14 +22,22 @@ const Home = () => {
         "Will be matrued in (days)",
         "Expected Savings Return Manual",
     ];
-    const csvData = [tableHead];
+    const csvData = [
+        [
+            `FTD Accounts generated on ${currentDate.toLocaleString()} from Proximity Finance`,
+        ],
+        tableHead,
+    ];
     return (
         <>
             <div>
                 <ReportForm csvData={csvData} />
             </div>
             <div>
-                <h3 className=" text-3xl mb-3">FTD Accounts generated on</h3>
+                <h3 className=" text-3xl mb-3">
+                    FTD Accounts generated on {currentDate.toLocaleString()}{" "}
+                    From Proximity Finance
+                </h3>
                 <table className="border border-collapsec border-solid border-black min-w-max">
                     <thead>
                         <tr>
