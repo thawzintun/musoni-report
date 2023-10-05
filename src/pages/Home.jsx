@@ -84,8 +84,12 @@ const Home = () => {
                                         data.accountNo,
                                         data.depositProductName,
                                         data.status.value,
-                                        data.timeline.activatedOnDate,
-                                        data.maturityDate,
+                                        new Date(
+                                            data.timeline.activatedOnDate
+                                        ).toLocaleString("en-US"),
+                                        new Date(
+                                            data.maturityDate
+                                        ).toLocaleString("en-US"),
                                         data.nominalAnnualInterestRate,
                                         data.summary.accountBalance,
                                         data.summary.totalDeposits,
