@@ -77,6 +77,7 @@ const Home = () => {
                                                     futureInterest
                                             ) / 50
                                         ) * 50;
+
                                     csvData.push([
                                         data.clientId,
                                         data.clientName,
@@ -86,10 +87,10 @@ const Home = () => {
                                         data.status.value,
                                         new Date(
                                             data.timeline.activatedOnDate
-                                        ).toLocaleString("en-US"),
+                                        ).toLocaleString(),
                                         new Date(
                                             data.maturityDate
-                                        ).toLocaleString("en-US"),
+                                        ).toLocaleString(),
                                         data.nominalAnnualInterestRate,
                                         data.summary.accountBalance,
                                         data.summary.totalDeposits,
