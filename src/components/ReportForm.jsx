@@ -1,3 +1,4 @@
+import { MD5 } from "crypto-js";
 import React from "react";
 import { CSVLink } from "react-csv";
 import { Form } from "react-router-dom";
@@ -32,12 +33,16 @@ const ReportForm = ({ csvData }) => {
 export default ReportForm;
 
 export const action = async ({ request }) => {
-    const token = localStorage.getItem("env");
-    const url = `https://api.live.sing.musoniservices.com/v1/fixeddepositaccounts?tenantIdentifier=${token}`;
+    let token = localStorage.getItem("env");
+    let url = `https://api.live.sing.musoniservices.com/v1/fixeddepositaccounts?tenantIdentifier=${token}`;
     const api = "1P8Rsli9pO5cHoSpyDOeDCLH3nIQTIG85gMfxOXh";
     const username = "thawzintun";
     const password = "99999999";
     const basicAuth = btoa(`${username}:${password}`);
+    if (token === MD5("proximityfinance").toString()) {
+        token = "proximityfinance";
+        url = `https://api.live.sing.musoniservices.com/v1/fixeddepositaccounts?tenantIdentifier=${token}`;
+    }
     try {
         const response = await fetch(url, {
             method: "GET", // You can specify the HTTP method (GET in this case)
@@ -49,5 +54,7 @@ export const action = async ({ request }) => {
         });
         const data = await response.json();
         return data;
-    } catch (error) {}
+    } catch (error) {
+        return null;
+    }
 };

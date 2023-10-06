@@ -56,6 +56,7 @@ const Home = () => {
                     <tbody>
                         {actionData &&
                             actionData.map((data) => {
+                                console.log(data);
                                 if (
                                     data.accountNo &&
                                     data.clientId &&
