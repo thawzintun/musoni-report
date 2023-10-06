@@ -30,10 +30,10 @@ const Home = () => {
     ];
     return (
         <>
-            <div>
+            <div className="px-3">
                 <ReportForm csvData={csvData} />
             </div>
-            <div>
+            <div className="px-3">
                 <h3 className=" text-3xl mb-3">
                     FTD Accounts generated on {currentDate.toLocaleString()}{" "}
                     From Proximity Finance

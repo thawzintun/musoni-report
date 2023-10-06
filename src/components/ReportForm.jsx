@@ -5,7 +5,7 @@ import { Form } from "react-router-dom";
 const ReportForm = ({ csvData }) => {
     return (
         <>
-            <Form method="post" className="flex gap-x-5 px-1 py-5">
+            <Form method="post" className="flex gap-x-5 py-5">
                 <input
                     type="date"
                     name="date"
