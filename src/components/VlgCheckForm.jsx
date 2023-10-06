@@ -1,11 +1,14 @@
 import React from "react";
-import { Form, redirect, useLoaderData } from "react-router-dom";
+import { Form, Link, redirect, useLoaderData } from "react-router-dom";
 import { getEnv } from "../util/auth";
 
 const VlgCheckForm = () => {
     const data = useLoaderData();
     return (
-        <div className="bg-white border border-gray-200 p-10 space-y-6 rounded">
+        <div className="bg-white border border-gray-200 p-10 space-y-3 rounded">
+            <Link to={"/"} className="text-2xl">
+                &larr;
+            </Link>
             <h3 className="text-xl font-semibold">Please Select VLG</h3>
             <Form method="post" className="grid grid-flow-row">
                 <select
@@ -35,7 +38,6 @@ export default VlgCheckForm;
 export const action = async ({ request, params }) => {
     const vlgData = await request.formData();
     const vlgId = vlgData.get("vlg");
-    console.log(vlgId);
     localStorage.setItem("vlgId", vlgId);
     const expDate = new Date();
     expDate.setHours(expDate.getHours() + 1);
@@ -78,6 +80,5 @@ export const loader = async ({ request, params }) => {
     });
 
     const groupData = await groupResponse.json();
-    console.log(groupData);
     return groupData;
 };

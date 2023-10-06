@@ -34,7 +34,6 @@ export default OfficeCheckForm;
 export const action = async ({ request, params }) => {
     const officeData = await request.formData();
     const officeId = officeData.get("office");
-    console.log(officeId);
     localStorage.setItem("officeId", officeId);
     const expDate = new Date();
     expDate.setHours(expDate.getHours() + 1);

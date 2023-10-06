@@ -1,6 +1,6 @@
 import React from "react";
 import ReportForm from "../components/ReportForm";
-import { useActionData } from "react-router-dom";
+import { Link, redirect, useActionData, useNavigate } from "react-router-dom";
 
 const Home = () => {
     const actionData = useActionData();
@@ -30,14 +30,22 @@ const Home = () => {
     ];
     return (
         <>
-            <div className="px-3">
-                <ReportForm csvData={csvData} />
+            <div className="px-3 pt-3 my-3">
+                <Link
+                    to={"/vlg"}
+                    className="bg-black text-white hover:opacity-50 active:opacity-75 px-4 py-2"
+                >
+                    Back
+                </Link>
             </div>
             <div className="px-3">
-                <h3 className=" text-3xl mb-3">
-                    FTD Accounts generated on {currentDate.toLocaleString()}{" "}
-                    from Proximity Finance
-                </h3>
+                <div className="flex justify-between mb-3 py-3">
+                    <h3 className="text-3xl">
+                        FTD Accounts generated on {currentDate.toLocaleString()}{" "}
+                        from Proximity Finance
+                    </h3>
+                    <ReportForm csvData={csvData} />
+                </div>
                 <table className="border border-collapsec border-solid border-black min-w-max">
                     <thead>
                         <tr>

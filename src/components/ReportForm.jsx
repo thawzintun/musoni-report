@@ -6,7 +6,7 @@ import { getEnv } from "../util/auth";
 const ReportForm = ({ csvData }) => {
     return (
         <>
-            <Form method="post" className="flex gap-x-5 py-3">
+            <Form method="post" className="flex gap-x-5">
                 <input
                     type="date"
                     name="date"
