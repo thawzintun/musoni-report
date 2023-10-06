@@ -17,6 +17,8 @@ export const getEnv = () => {
     if (duration < 0) {
         localStorage.removeItem("env");
         localStorage.removeItem("exp");
+        localStorage.removeItem("officeId");
+        localStorage.removeItem("vlgId");
         alert("Token Expired!");
         return null;
     }
