@@ -1,4 +1,4 @@
-import { MD5 } from "crypto-js";
+import { SHA256 } from "crypto-js";
 import React from "react";
 import { Form, redirect, useActionData } from "react-router-dom";
 
@@ -29,10 +29,12 @@ const EnvCheckForm = () => {
 export default EnvCheckForm;
 
 export const action = async ({ request, params }) => {
+    const enc =
+        "6f503ae9985d5328ab59bf6e8bb1ebf96f3bda79586cd42a56a90bc7bcfa9797";
     const data = await request.formData();
     const env = data.get("env");
-    if (env === "proximityfinance") {
-        const encrypted = MD5(env).toString();
+    const encrypted = SHA256(env).toString();
+    if (encrypted === enc) {
         localStorage.setItem("env", encrypted);
         const expDate = new Date();
         expDate.setHours(expDate.getHours() + 1);

@@ -8,13 +8,13 @@ import {
 import Home from "./pages/Home";
 import EnvCheck from "./pages/EnvCheck";
 import { action as envCheckAction } from "./components/EnvCheckForm";
-import { loader as envLoader, homeRouteEnv } from "./util/auth";
+import { homeRouteEnv, loader as Envloader } from "./util/auth";
 
 const router = createBrowserRouter([
     {
         path: "",
         element: <Main />,
-        loader: envLoader,
+        loader: Envloader,
         children: [
             {
                 index: true,
