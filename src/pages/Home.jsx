@@ -36,7 +36,7 @@ const Home = () => {
             <div className="px-3">
                 <h3 className=" text-3xl mb-3">
                     FTD Accounts generated on {currentDate.toLocaleString()}{" "}
-                    From Proximity Finance
+                    from Proximity Finance
                 </h3>
                 <table className="border border-collapsec border-solid border-black min-w-max">
                     <thead>

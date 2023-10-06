@@ -32,8 +32,8 @@ const ReportForm = ({ csvData }) => {
 export default ReportForm;
 
 export const action = async ({ request }) => {
-    const url =
-        "https://api.live.sing.musoniservices.com/v1/fixeddepositaccounts?tenantIdentifier=proximityfinance";
+    const token = localStorage.getItem("env");
+    const url = `https://api.live.sing.musoniservices.com/v1/fixeddepositaccounts?tenantIdentifier=${token}`;
     const api = "1P8Rsli9pO5cHoSpyDOeDCLH3nIQTIG85gMfxOXh";
     const username = "thawzintun";
     const password = "99999999";
