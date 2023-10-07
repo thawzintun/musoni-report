@@ -1,9 +1,8 @@
 import React from "react";
-import { CSVLink } from "react-csv";
 import { Form, redirect } from "react-router-dom";
 import { getEnv } from "../util/auth";
 
-const ReportForm = ({ csvData }) => {
+const ReportForm = () => {
     return (
         <>
             <Form method="post" className="flex gap-x-5">
@@ -16,15 +15,6 @@ const ReportForm = ({ csvData }) => {
                 <button className=" border px-4 py-2 border-black hover:bg-gray-300 active:bg-gray-400 hover:border-gray-300 active:border-gray-400">
                     Run Report
                 </button>
-                {csvData && csvData.length > 2 && (
-                    <CSVLink
-                        className=" border px-4 py-2 border-black bg-black text-white hover:opacity-50 active:opacity-75 "
-                        filename="report.csv"
-                        data={csvData}
-                    >
-                        Export to CSV
-                    </CSVLink>
-                )}
             </Form>
         </>
     );

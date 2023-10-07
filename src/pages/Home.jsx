@@ -2,33 +2,165 @@ import React from "react";
 import ReportForm from "../components/ReportForm";
 import { Link, useActionData, useNavigation } from "react-router-dom";
 import Loading from "../components/Loading";
+import {
+    DataGrid,
+    GridToolbarColumnsButton,
+    GridToolbarContainer,
+    GridToolbarDensitySelector,
+    GridToolbarExport,
+    GridToolbarFilterButton,
+} from "@mui/x-data-grid";
 
 const Home = () => {
     const actionData = useActionData();
     var currentDate = new Date();
-    const tableHead = [
-        "Client ID",
-        "Client Name",
-        "Account ID",
-        "Account No",
-        "Product Name",
-        "Account Status",
-        "Activation Date/Approved Date",
-        "Expected Maturity Date",
-        "Interest Rate",
-        "Account Balance",
-        "Total Deposit",
-        "Total Interest Earned",
-        "Total Interest Posted",
-        "Will be matrued in (days)",
-        "Expected Savings Return Manual",
+
+    function CustomToolbar() {
+        return (
+            <GridToolbarContainer>
+                <GridToolbarColumnsButton />
+                <GridToolbarFilterButton />
+                <GridToolbarDensitySelector />
+                <GridToolbarExport
+                    csvOptions={{
+                        fileName: "FTD Report",
+                        utf8WithBom: true,
+                    }}
+                />
+            </GridToolbarContainer>
+        );
+    }
+
+    let rows = [];
+    let rowId = 0;
+    actionData &&
+        actionData.map((data) => {
+            if (
+                data.accountNo &&
+                data.clientId &&
+                data.status.active &&
+                data.timeline.activatedOnDate
+            ) {
+                const oneDay = 24 * 60 * 60 * 1000;
+                const diffDays = Math.round(
+                    Math.abs(
+                        (new Date(data.maturityDate) - currentDate) / oneDay
+                    )
+                );
+                const futureInterest =
+                    (((data.nominalAnnualInterestRate / 100) *
+                        data.summary.accountBalance) /
+                        365) *
+                    diffDays;
+                const expSavReturnManual =
+                    Math.round(
+                        parseInt(
+                            data.summary.totalDeposits +
+                                data.summary.totalInterestEarned +
+                                futureInterest
+                        ) / 50
+                    ) * 50;
+
+                rows.push({
+                    id: rowId++,
+                    clientId: data.clientId,
+                    clientName: data.clientName,
+                    accId: data.id,
+                    accountNo: data.accountNo,
+                    depositProductName: data.depositProductName,
+                    value: data.status.value,
+                    activatedOnDate: new Date(
+                        data.timeline.activatedOnDate
+                    ).toLocaleString(),
+                    maturityDate: new Date(data.maturityDate).toLocaleString(),
+                    nominalAnnualInterestRate: data.nominalAnnualInterestRate,
+                    accountBalance: data.summary.accountBalance,
+                    totalDeposits: data.summary.totalDeposits,
+                    totalInterestEarned: data.summary.totalInterestEarned
+                        ? data.summary.totalInterestEarned
+                        : "-",
+                    totalInterestPosted: data.summary.totalInterestPosted
+                        ? data.summary.totalInterestPosted
+                        : "-",
+                    diffDays: diffDays,
+                    expSavReturnManual: expSavReturnManual
+                        ? expSavReturnManual
+                        : "-",
+                });
+            }
+            return null;
+        });
+
+    const columns = [
+        {
+            field: "clientId",
+            headerName: "Client ID",
+            width: 130,
+        },
+        {
+            field: "clientName",
+            headerName: "Client Name",
+            width: 250,
+        },
+        {
+            field: "accId",
+            headerName: "Account ID",
+            width: 150,
+        },
+        {
+            field: "accountNo",
+            headerName: "Account No",
+            width: 150,
+        },
+        {
+            field: "depositProductName",
+            headerName: "Product Name",
+            width: 350,
+        },
+        {
+            field: "value",
+            headerName: "Account Status",
+            width: 170,
+        },
+        {
+            field: "activatedOnDate",
+            headerName: "Activation Date/Approved Date",
+            width: 270,
+        },
+        {
+            field: "maturityDate",
+            headerName: "Expected Maturity Date",
+            width: 270,
+        },
+        {
+            field: "nominalAnnualInterestRate",
+            headerName: "Interest Rate",
+            width: 150,
+        },
+        { field: "accountBalance", headerName: "Account Balance", width: 180 },
+        { field: "totalDeposits", headerName: "Total Deposit", width: 170 },
+        {
+            field: "totalInterestEarned",
+            headerName: "Total Interest Earned",
+            width: 170,
+        },
+        {
+            field: "totalInterestPosted",
+            headerName: "Total Interest Posted",
+            width: 170,
+        },
+        {
+            field: "diffDays",
+            headerName: "Will be matrued in (days)",
+            width: 180,
+        },
+        {
+            field: "expSavReturnManual",
+            headerName: "Expected Savings Return Manual",
+            width: 270,
+        },
     ];
-    const csvData = [
-        [
-            `FTD Accounts generated on ${currentDate.toLocaleString()} from Proximity Finance`,
-        ],
-        tableHead,
-    ];
+
     const { state } = useNavigation();
     return (
         <>
@@ -46,164 +178,18 @@ const Home = () => {
                         FTD Accounts generated on {currentDate.toLocaleString()}{" "}
                         from Proximity Finance
                     </h3>
-                    <ReportForm csvData={csvData} />
+                    <ReportForm />
                 </div>
                 {state === "submitting" ? (
                     <Loading />
                 ) : (
-                    <table className="border border-collapsec border-solid border-black min-w-max">
-                        <thead>
-                            <tr>
-                                {tableHead.map((name, index) => {
-                                    return (
-                                        <th
-                                            key={index}
-                                            className="border-r border-b border-black p-3"
-                                        >
-                                            {name}
-                                        </th>
-                                    );
-                                })}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {actionData &&
-                                actionData.map((data) => {
-                                    if (
-                                        data.accountNo &&
-                                        data.clientId &&
-                                        data.status.active &&
-                                        data.timeline.activatedOnDate
-                                    ) {
-                                        const oneDay = 24 * 60 * 60 * 1000;
-                                        const diffDays = Math.round(
-                                            Math.abs(
-                                                (new Date(data.maturityDate) -
-                                                    currentDate) /
-                                                    oneDay
-                                            )
-                                        );
-                                        const futureInterest =
-                                            (((data.nominalAnnualInterestRate /
-                                                100) *
-                                                data.summary.accountBalance) /
-                                                365) *
-                                            diffDays;
-                                        const expSavReturnManual =
-                                            Math.round(
-                                                parseInt(
-                                                    data.summary.totalDeposits +
-                                                        data.summary
-                                                            .totalInterestEarned +
-                                                        futureInterest
-                                                ) / 50
-                                            ) * 50;
-
-                                        csvData.push([
-                                            data.clientId,
-                                            data.clientName,
-                                            data.id,
-                                            data.accountNo,
-                                            data.depositProductName,
-                                            data.status.value,
-                                            new Date(
-                                                data.timeline.activatedOnDate
-                                            ).toLocaleString(),
-                                            new Date(
-                                                data.maturityDate
-                                            ).toLocaleString(),
-                                            data.nominalAnnualInterestRate,
-                                            data.summary.accountBalance,
-                                            data.summary.totalDeposits,
-                                            data.summary.totalInterestEarned
-                                                ? data.summary
-                                                      .totalInterestEarned
-                                                : "-",
-                                            data.summary.totalInterestPosted
-                                                ? data.summary
-                                                      .totalInterestPosted
-                                                : "-",
-                                            diffDays,
-                                            expSavReturnManual
-                                                ? expSavReturnManual
-                                                : "-",
-                                        ]);
-                                        return (
-                                            <tr
-                                                key={data.id}
-                                                className="border border-black"
-                                            >
-                                                <td className="border-r border-b border-black p-2">
-                                                    {data.clientId}
-                                                </td>
-                                                <td className="border-r border-b border-black p-2">
-                                                    {data.clientName}
-                                                </td>
-                                                <td className="border-r border-b border-black p-2">
-                                                    {data.id}
-                                                </td>
-                                                <td className="border-r border-b border-black p-2">
-                                                    {data.accountNo}
-                                                </td>
-                                                <td className="border-r border-b border-black p-2">
-                                                    {data.depositProductName}
-                                                </td>
-                                                <td className="border-r border-b border-black p-2">
-                                                    {data.status.value}
-                                                </td>
-                                                <td className="border-r border-b border-black p-2">
-                                                    {new Date(
-                                                        data.timeline.activatedOnDate
-                                                    ).toLocaleString("en-US")}
-                                                </td>
-                                                <td className="border-r border-b border-black p-2">
-                                                    {new Date(
-                                                        data.maturityDate
-                                                    ).toLocaleString("en-US")}
-                                                </td>
-                                                <td className="border-r border-b border-black p-2">
-                                                    {
-                                                        data.nominalAnnualInterestRate
-                                                    }
-                                                </td>
-                                                <td className="border-r border-b border-black p-2">
-                                                    {
-                                                        data.summary
-                                                            .accountBalance
-                                                    }
-                                                </td>
-                                                <td className="border-r border-b border-black p-2">
-                                                    {data.summary.totalDeposits}
-                                                </td>
-                                                <td className="border-r border-b border-black p-2">
-                                                    {data.summary
-                                                        .totalInterestEarned
-                                                        ? data.summary
-                                                              .totalInterestEarned
-                                                        : "-"}
-                                                </td>
-                                                <td className="border-r border-b border-black p-2">
-                                                    {data.summary
-                                                        .totalInterestPosted
-                                                        ? data.summary
-                                                              .totalInterestPosted
-                                                        : "-"}
-                                                </td>
-                                                <td className="border-r border-b border-black p-2">
-                                                    {diffDays}
-                                                </td>
-                                                <td className="border-r border-b border-black p-2">
-                                                    {expSavReturnManual
-                                                        ? expSavReturnManual
-                                                        : "-"}
-                                                </td>
-                                            </tr>
-                                        );
-                                    }
-                                    return null;
-                                })}
-                        </tbody>
-                    </table>
+                    <DataGrid
+                        rows={rows}
+                        columns={columns}
+                        showCellVerticalBorder
+                        showColumnVerticalBorder
+                        slots={actionData ? { toolbar: CustomToolbar } : ""}
+                    />
                 )}
             </div>
         </>
