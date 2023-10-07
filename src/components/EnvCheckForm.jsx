@@ -12,7 +12,7 @@ const EnvCheckForm = () => {
             </h3>
             <Form method="post" className="grid grid-flow-row">
                 <input
-                    type="text"
+                    type="password"
                     name="env"
                     id="env"
                     className="border rounded border-gray-400 mb-2 px-2 py-1"

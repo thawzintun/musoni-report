@@ -17,6 +17,7 @@ const VlgCheckForm = () => {
                     className="border rounded border-gray-400 mb-2 px-2 py-1"
                     required
                 >
+                    <option value="">Select VLG</option>
                     {data.map((data) => {
                         if (data.status.value === "Active") {
                             return (
@@ -25,6 +26,7 @@ const VlgCheckForm = () => {
                                 </option>
                             );
                         }
+                        return null;
                     })}
                 </select>
                 <button className="border bg-black text-white rounded hover:opacity-50 active:opacity-75 py-1 px-2 mb-2">
