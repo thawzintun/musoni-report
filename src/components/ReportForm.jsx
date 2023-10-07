@@ -63,14 +63,9 @@ export const action = async ({ request }) => {
 };
 
 export const loader = async () => {
-    const token = getEnv();
+    let token = getEnv();
     if (!token) {
         return redirect("/env");
-    }
-    const branch = localStorage.getItem("officeId");
-    if (!branch) {
-        alert("Please select Branch first!");
-        return redirect("/");
     }
 
     const vlg = localStorage.getItem("vlgId");
@@ -79,5 +74,29 @@ export const loader = async () => {
         return redirect("/vlg");
     }
 
+    // let url = `https://api.live.sing.musoniservices.com/v1/clients?tenantIdentifier=${token}&limit=100`;
+    // const api = "1P8Rsli9pO5cHoSpyDOeDCLH3nIQTIG85gMfxOXh";
+    // const username = "thawzintun";
+    // const password = "99999999";
+    // const basicAuth = btoa(`${username}:${password}`);
+
+    // if (
+    //     token ===
+    //     "6f503ae9985d5328ab59bf6e8bb1ebf96f3bda79586cd42a56a90bc7bcfa9797"
+    // ) {
+    //     token = "proximityfinance";
+    //     url = `https://api.live.sing.musoniservices.com/v1/clients?tenantIdentifier=${token}&limit=100`;
+    // }
+    // const response = await fetch(url, {
+    //     method: "GET", // You can specify the HTTP method (GET in this case)
+    //     headers: {
+    //         Authorization: "Basic " + basicAuth, // Note the space after "Basic"
+    //         "Content-Type": "application/json",
+    //         "x-api-key": api,
+    //     },
+    // });
+
+    // const data = await response.json();
+    // console.log(data);
     return null;
 };

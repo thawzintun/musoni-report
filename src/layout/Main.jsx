@@ -1,12 +1,10 @@
 import React from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigation } from "react-router-dom";
+import Loading from "../components/Loading";
 
 const Main = () => {
-    return (
-        <>
-            <Outlet />
-        </>
-    );
+    const { state } = useNavigation();
+    return <>{state === "loading" ? <Loading /> : <Outlet />}</>;
 };
 
 export default Main;

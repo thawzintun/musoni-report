@@ -18,11 +18,13 @@ const VlgCheckForm = () => {
                     required
                 >
                     {data.map((data) => {
-                        return (
-                            <option key={data.id} value={data.id}>
-                                {data.name}
-                            </option>
-                        );
+                        if (data.status.value === "Active") {
+                            return (
+                                <option key={data.id} value={data.id}>
+                                    {data.name}
+                                </option>
+                            );
+                        }
                     })}
                 </select>
                 <button className="border bg-black text-white rounded hover:opacity-50 active:opacity-75 py-1 px-2 mb-2">

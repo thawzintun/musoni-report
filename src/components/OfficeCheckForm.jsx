@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { getEnv } from "../util/auth";
 import { Form, redirect, useLoaderData } from "react-router-dom";
 
 const OfficeCheckForm = () => {
     const data = useLoaderData();
+
     return (
         <div className="bg-white border border-gray-200 p-10 space-y-6 rounded">
             <h3 className="text-xl font-semibold">Please Select Your Branch</h3>
@@ -12,7 +13,9 @@ const OfficeCheckForm = () => {
                     name="office"
                     id="office"
                     className="border rounded border-gray-400 mb-2 px-2 py-1"
+                    required
                 >
+                    <option value="">Select Branch</option>
                     {data.map((data) => {
                         return (
                             <option key={data.id} value={data.id}>

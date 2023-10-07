@@ -1,6 +1,7 @@
 import React from "react";
 import ReportForm from "../components/ReportForm";
-import { Link, redirect, useActionData, useNavigate } from "react-router-dom";
+import { Link, useActionData, useNavigation } from "react-router-dom";
+import Loading from "../components/Loading";
 
 const Home = () => {
     const actionData = useActionData();
@@ -28,6 +29,7 @@ const Home = () => {
         ],
         tableHead,
     ];
+    const { state } = useNavigation();
     return (
         <>
             <div className="px-3 pt-3 my-3">
@@ -46,143 +48,152 @@ const Home = () => {
                     </h3>
                     <ReportForm csvData={csvData} />
                 </div>
-                <table className="border border-collapsec border-solid border-black min-w-max">
-                    <thead>
-                        <tr>
-                            {tableHead.map((name, index) => {
-                                return (
-                                    <th
-                                        key={index}
-                                        className="border-r border-b border-black p-3"
-                                    >
-                                        {name}
-                                    </th>
-                                );
-                            })}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {actionData &&
-                            actionData.map((data) => {
-                                console.log(data);
-                                if (
-                                    data.accountNo &&
-                                    data.clientId &&
-                                    data.status.active &&
-                                    data.timeline.activatedOnDate
-                                ) {
-                                    const oneDay = 24 * 60 * 60 * 1000;
-                                    const diffDays = Math.round(
-                                        Math.abs(
-                                            (new Date(data.maturityDate) -
-                                                currentDate) /
-                                                oneDay
-                                        )
-                                    );
-                                    const futureInterest =
-                                        (((data.nominalAnnualInterestRate /
-                                            100) *
-                                            data.summary.accountBalance) /
-                                            365) *
-                                        diffDays;
-                                    const expSavReturnManual =
-                                        Math.round(
-                                            parseInt(
-                                                data.summary.totalDeposits +
-                                                    data.summary
-                                                        .totalInterestEarned +
-                                                    futureInterest
-                                            ) / 50
-                                        ) * 50;
-
-                                    csvData.push([
-                                        data.clientId,
-                                        data.clientName,
-                                        data.id,
-                                        data.accountNo,
-                                        data.depositProductName,
-                                        data.status.value,
-                                        new Date(
-                                            data.timeline.activatedOnDate
-                                        ).toLocaleString(),
-                                        new Date(
-                                            data.maturityDate
-                                        ).toLocaleString(),
-                                        data.nominalAnnualInterestRate,
-                                        data.summary.accountBalance,
-                                        data.summary.totalDeposits,
-                                        data.summary.totalInterestEarned,
-                                        data.summary.totalInterestPosted,
-                                        diffDays,
-                                        expSavReturnManual,
-                                    ]);
+                {state === "submitting" ? (
+                    <Loading />
+                ) : (
+                    <table className="border border-collapsec border-solid border-black min-w-max">
+                        <thead>
+                            <tr>
+                                {tableHead.map((name, index) => {
                                     return (
-                                        <tr
-                                            key={data.id}
-                                            className="border border-black"
+                                        <th
+                                            key={index}
+                                            className="border-r border-b border-black p-3"
                                         >
-                                            <td className="border-r border-b border-black p-2">
-                                                {data.clientId}
-                                            </td>
-                                            <td className="border-r border-b border-black p-2">
-                                                {data.clientName}
-                                            </td>
-                                            <td className="border-r border-b border-black p-2">
-                                                {data.id}
-                                            </td>
-                                            <td className="border-r border-b border-black p-2">
-                                                {data.accountNo}
-                                            </td>
-                                            <td className="border-r border-b border-black p-2">
-                                                {data.depositProductName}
-                                            </td>
-                                            <td className="border-r border-b border-black p-2">
-                                                {data.status.value}
-                                            </td>
-                                            <td className="border-r border-b border-black p-2">
-                                                {new Date(
-                                                    data.timeline.activatedOnDate
-                                                ).toLocaleString("en-US")}
-                                            </td>
-                                            <td className="border-r border-b border-black p-2">
-                                                {new Date(
-                                                    data.maturityDate
-                                                ).toLocaleString("en-US")}
-                                            </td>
-                                            <td className="border-r border-b border-black p-2">
-                                                {data.nominalAnnualInterestRate}
-                                            </td>
-                                            <td className="border-r border-b border-black p-2">
-                                                {data.summary.accountBalance}
-                                            </td>
-                                            <td className="border-r border-b border-black p-2">
-                                                {data.summary.totalDeposits}
-                                            </td>
-                                            <td className="border-r border-b border-black p-2">
-                                                {
-                                                    data.summary
-                                                        .totalInterestEarned
-                                                }
-                                            </td>
-                                            <td className="border-r border-b border-black p-2">
-                                                {
-                                                    data.summary
-                                                        .totalInterestPosted
-                                                }
-                                            </td>
-                                            <td className="border-r border-b border-black p-2">
-                                                {diffDays}
-                                            </td>
-                                            <td className="border-r border-b border-black p-2">
-                                                {expSavReturnManual}
-                                            </td>
-                                        </tr>
+                                            {name}
+                                        </th>
                                     );
-                                }
-                                return null;
-                            })}
-                    </tbody>
-                </table>
+                                })}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {actionData &&
+                                actionData.map((data) => {
+                                    console.log(data);
+                                    if (
+                                        data.accountNo &&
+                                        data.clientId &&
+                                        data.status.active &&
+                                        data.timeline.activatedOnDate
+                                    ) {
+                                        const oneDay = 24 * 60 * 60 * 1000;
+                                        const diffDays = Math.round(
+                                            Math.abs(
+                                                (new Date(data.maturityDate) -
+                                                    currentDate) /
+                                                    oneDay
+                                            )
+                                        );
+                                        const futureInterest =
+                                            (((data.nominalAnnualInterestRate /
+                                                100) *
+                                                data.summary.accountBalance) /
+                                                365) *
+                                            diffDays;
+                                        const expSavReturnManual =
+                                            Math.round(
+                                                parseInt(
+                                                    data.summary.totalDeposits +
+                                                        data.summary
+                                                            .totalInterestEarned +
+                                                        futureInterest
+                                                ) / 50
+                                            ) * 50;
+
+                                        csvData.push([
+                                            data.clientId,
+                                            data.clientName,
+                                            data.id,
+                                            data.accountNo,
+                                            data.depositProductName,
+                                            data.status.value,
+                                            new Date(
+                                                data.timeline.activatedOnDate
+                                            ).toLocaleString(),
+                                            new Date(
+                                                data.maturityDate
+                                            ).toLocaleString(),
+                                            data.nominalAnnualInterestRate,
+                                            data.summary.accountBalance,
+                                            data.summary.totalDeposits,
+                                            data.summary.totalInterestEarned,
+                                            data.summary.totalInterestPosted,
+                                            diffDays,
+                                            expSavReturnManual,
+                                        ]);
+                                        return (
+                                            <tr
+                                                key={data.id}
+                                                className="border border-black"
+                                            >
+                                                <td className="border-r border-b border-black p-2">
+                                                    {data.clientId}
+                                                </td>
+                                                <td className="border-r border-b border-black p-2">
+                                                    {data.clientName}
+                                                </td>
+                                                <td className="border-r border-b border-black p-2">
+                                                    {data.id}
+                                                </td>
+                                                <td className="border-r border-b border-black p-2">
+                                                    {data.accountNo}
+                                                </td>
+                                                <td className="border-r border-b border-black p-2">
+                                                    {data.depositProductName}
+                                                </td>
+                                                <td className="border-r border-b border-black p-2">
+                                                    {data.status.value}
+                                                </td>
+                                                <td className="border-r border-b border-black p-2">
+                                                    {new Date(
+                                                        data.timeline.activatedOnDate
+                                                    ).toLocaleString("en-US")}
+                                                </td>
+                                                <td className="border-r border-b border-black p-2">
+                                                    {new Date(
+                                                        data.maturityDate
+                                                    ).toLocaleString("en-US")}
+                                                </td>
+                                                <td className="border-r border-b border-black p-2">
+                                                    {
+                                                        data.nominalAnnualInterestRate
+                                                    }
+                                                </td>
+                                                <td className="border-r border-b border-black p-2">
+                                                    {
+                                                        data.summary
+                                                            .accountBalance
+                                                    }
+                                                </td>
+                                                <td className="border-r border-b border-black p-2">
+                                                    {data.summary.totalDeposits}
+                                                </td>
+                                                <td className="border-r border-b border-black p-2">
+                                                    {
+                                                        data.summary
+                                                            .totalInterestEarned
+                                                    }
+                                                </td>
+                                                <td className="border-r border-b border-black p-2">
+                                                    {
+                                                        data.summary
+                                                            .totalInterestPosted
+                                                    }
+                                                </td>
+                                                <td className="border-r border-b border-black p-2">
+                                                    {diffDays}
+                                                </td>
+                                                <td className="border-r border-b border-black p-2">
+                                                    {expSavReturnManual}
+                                                </td>
+                                            </tr>
+                                        );
+                                    }
+                                    return null;
+                                })}
+                        </tbody>
+                    </table>
+                )}
             </div>
         </>
     );
