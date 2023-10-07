@@ -34,7 +34,7 @@ export default ReportForm;
 
 export const action = async ({ request }) => {
     let token = localStorage.getItem("env");
-    let url = `https://api.live.sing.musoniservices.com/v1/fixeddepositaccounts?tenantIdentifier=${token}`;
+    let url = `https://api.live.sing.musoniservices.com/v1/fixeddepositaccounts?tenantIdentifier=${token}&limit=20000&offset=0&status=300`;
     const api = "1P8Rsli9pO5cHoSpyDOeDCLH3nIQTIG85gMfxOXh";
     const username = "thawzintun";
     const password = "99999999";
@@ -44,7 +44,7 @@ export const action = async ({ request }) => {
         "6f503ae9985d5328ab59bf6e8bb1ebf96f3bda79586cd42a56a90bc7bcfa9797"
     ) {
         token = "proximityfinance";
-        url = `https://api.live.sing.musoniservices.com/v1/fixeddepositaccounts?tenantIdentifier=${token}`;
+        url = `https://api.live.sing.musoniservices.com/v1/fixeddepositaccounts?tenantIdentifier=${token}&limit=20000&offset=0&status=300`;
     }
     try {
         const response = await fetch(url, {

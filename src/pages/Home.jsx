@@ -69,7 +69,6 @@ const Home = () => {
                         <tbody>
                             {actionData &&
                                 actionData.map((data) => {
-                                    console.log(data);
                                     if (
                                         data.accountNo &&
                                         data.clientId &&
@@ -116,10 +115,18 @@ const Home = () => {
                                             data.nominalAnnualInterestRate,
                                             data.summary.accountBalance,
                                             data.summary.totalDeposits,
-                                            data.summary.totalInterestEarned,
-                                            data.summary.totalInterestPosted,
+                                            data.summary.totalInterestEarned
+                                                ? data.summary
+                                                      .totalInterestEarned
+                                                : "-",
+                                            data.summary.totalInterestPosted
+                                                ? data.summary
+                                                      .totalInterestPosted
+                                                : "-",
                                             diffDays,
-                                            expSavReturnManual,
+                                            expSavReturnManual
+                                                ? expSavReturnManual
+                                                : "-",
                                         ]);
                                         return (
                                             <tr
@@ -169,22 +176,26 @@ const Home = () => {
                                                     {data.summary.totalDeposits}
                                                 </td>
                                                 <td className="border-r border-b border-black p-2">
-                                                    {
-                                                        data.summary
-                                                            .totalInterestEarned
-                                                    }
+                                                    {data.summary
+                                                        .totalInterestEarned
+                                                        ? data.summary
+                                                              .totalInterestEarned
+                                                        : "-"}
                                                 </td>
                                                 <td className="border-r border-b border-black p-2">
-                                                    {
-                                                        data.summary
-                                                            .totalInterestPosted
-                                                    }
+                                                    {data.summary
+                                                        .totalInterestPosted
+                                                        ? data.summary
+                                                              .totalInterestPosted
+                                                        : "-"}
                                                 </td>
                                                 <td className="border-r border-b border-black p-2">
                                                     {diffDays}
                                                 </td>
                                                 <td className="border-r border-b border-black p-2">
-                                                    {expSavReturnManual}
+                                                    {expSavReturnManual
+                                                        ? expSavReturnManual
+                                                        : "-"}
                                                 </td>
                                             </tr>
                                         );
