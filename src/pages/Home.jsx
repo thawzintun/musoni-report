@@ -35,6 +35,7 @@ const Home = () => {
     let rowId = 0;
     actionData &&
         actionData.map((data) => {
+            console.log(data);
             if (
                 data.accountNo &&
                 data.clientId &&
@@ -152,7 +153,7 @@ const Home = () => {
         {
             field: "diffDays",
             headerName: "Will be matrued in (days)",
-            width: 180,
+            width: 200,
         },
         {
             field: "expSavReturnManual",
@@ -188,7 +189,7 @@ const Home = () => {
                         columns={columns}
                         showCellVerticalBorder
                         showColumnVerticalBorder
-                        slots={actionData ? { toolbar: CustomToolbar } : ""}
+                        slots={actionData ? { toolbar: CustomToolbar } : {}}
                     />
                 )}
             </div>

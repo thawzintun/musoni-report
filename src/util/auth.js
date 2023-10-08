@@ -22,6 +22,9 @@ export const getEnv = () => {
         alert("Token Expired!");
         return null;
     }
+    const expDate = new Date();
+    expDate.setHours(expDate.getHours() + 1);
+    localStorage.setItem("exp", expDate.toISOString());
     return token;
 };
 
