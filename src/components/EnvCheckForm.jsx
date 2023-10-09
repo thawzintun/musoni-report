@@ -1,25 +1,76 @@
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+import {
+    Button,
+    FormControl,
+    IconButton,
+    InputAdornment,
+    InputLabel,
+    OutlinedInput,
+} from "@mui/material";
 import { SHA256 } from "crypto-js";
 import React from "react";
 import { Form, redirect, useActionData } from "react-router-dom";
-
 const EnvCheckForm = () => {
     const message = useActionData();
+
+    const [showPassword, setShowPassword] = React.useState(false);
+
+    const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+    const handleMouseDownPassword = (e) => {
+        e.preventDefault();
+    };
 
     return (
         <div className="bg-white border border-gray-200 p-10 space-y-6 rounded">
             <h3 className="text-xl font-semibold">
                 Please Enter Environment Variable
             </h3>
-            <Form method="post" className="grid grid-flow-row">
-                <input
+
+            <Form method="post" className="grid grid-flow-row gap-y-3">
+                <FormControl variant="outlined">
+                    <InputLabel
+                        htmlFor="outlined-adornment-password"
+                        className=" text-gray-500"
+                    >
+                        Password
+                    </InputLabel>
+                    <OutlinedInput
+                        id="env"
+                        name="env"
+                        type={showPassword ? "text" : "password"}
+                        endAdornment={
+                            <InputAdornment position="end">
+                                <IconButton
+                                    aria-label="toggle password visibility"
+                                    onClick={handleClickShowPassword}
+                                    onMouseDown={handleMouseDownPassword}
+                                    edge="end"
+                                >
+                                    {showPassword ? (
+                                        <VisibilityOff />
+                                    ) : (
+                                        <Visibility />
+                                    )}
+                                </IconButton>
+                            </InputAdornment>
+                        }
+                        label="Password"
+                    />
+                </FormControl>
+                {/* <input
                     type="password"
                     name="env"
                     id="env"
                     className="border rounded border-gray-400 mb-2 px-2 py-1"
-                />
-                <button className="border bg-black text-white rounded hover:opacity-50 active:opacity-75 py-1 px-2 mb-2">
+                /> */}
+                <Button
+                    sx={{ bgcolor: "black", color: "white" }}
+                    type="submit"
+                    variant="contained"
+                >
                     Continue
-                </button>
+                </Button>
                 {message && <small className="text-red-500">{message}</small>}
             </Form>
         </div>

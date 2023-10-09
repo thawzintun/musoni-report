@@ -1,15 +1,54 @@
-import React from "react";
+import React, { useState } from "react";
 import { getEnv } from "../util/auth";
 import { Form, redirect, useLoaderData } from "react-router-dom";
+import {
+    Button,
+    FormControl,
+    InputLabel,
+    MenuItem,
+    Select,
+} from "@mui/material";
 
 const OfficeCheckForm = () => {
     const data = useLoaderData();
+    const [officeId, setOfficeId] = useState("");
+
+    const handleChange = (e) => {
+        setOfficeId(e.target.value);
+    };
 
     return (
-        <div className="bg-white border border-gray-200 p-10 space-y-6 rounded">
+        <div className="bg-white border border-gray-200 p-10 space-y-6 rounded min-w-[20%]">
             <h3 className="text-xl font-semibold">Please Select Your Branch</h3>
-            <Form method="post" className="grid grid-flow-row">
-                <select
+            <Form method="post" className="grid grid-flow-row gap-y-3">
+                <FormControl fullWidth>
+                    <InputLabel id="office">Select Branch</InputLabel>
+                    <Select
+                        labelId="office"
+                        id="office"
+                        label="Select Branch"
+                        name="office"
+                        value={officeId}
+                        onChange={handleChange}
+                        required
+                    >
+                        {data.map((data) => {
+                            return (
+                                <MenuItem key={data.id} value={data.id}>
+                                    {data.name}
+                                </MenuItem>
+                            );
+                        })}
+                    </Select>
+                </FormControl>
+                <Button
+                    sx={{ bgcolor: "black", color: "white" }}
+                    type="submit"
+                    variant="contained"
+                >
+                    Continue
+                </Button>
+                {/* <select
                     name="office"
                     id="office"
                     className="border rounded border-gray-400 mb-2 px-2 py-1"
@@ -23,10 +62,10 @@ const OfficeCheckForm = () => {
                             </option>
                         );
                     })}
-                </select>
-                <button className="border bg-black text-white rounded hover:opacity-50 active:opacity-75 py-1 px-2 mb-2">
+                </select> */}
+                {/* <button className="border bg-black text-white rounded hover:opacity-50 active:opacity-75 py-1 px-2 mb-2">
                     Continue
-                </button>
+                </button> */}
             </Form>
         </div>
     );

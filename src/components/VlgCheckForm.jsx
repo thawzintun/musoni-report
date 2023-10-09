@@ -1,17 +1,59 @@
-import React from "react";
+import React, { useState } from "react";
 import { Form, Link, redirect, useLoaderData } from "react-router-dom";
 import { getEnv } from "../util/auth";
+import {
+    Button,
+    FormControl,
+    InputLabel,
+    MenuItem,
+    Select,
+} from "@mui/material";
 
 const VlgCheckForm = () => {
     const data = useLoaderData();
+    const [vlgId, setVlgId] = useState("");
+
+    const handleChange = (e) => {
+        setVlgId(e.target.value);
+    };
     return (
-        <div className="bg-white border border-gray-200 p-10 space-y-3 rounded">
+        <div className="bg-white border border-gray-200 p-10 space-y-3 rounded min-w-[20%]">
             <Link to={"/"} className="text-2xl">
                 &larr;
             </Link>
             <h3 className="text-xl font-semibold">Please Select VLG</h3>
-            <Form method="post" className="grid grid-flow-row">
-                <select
+            <Form method="post" className="grid grid-flow-row gap-y-3">
+                <FormControl fullWidth>
+                    <InputLabel id="vlg">Select VLG</InputLabel>
+                    <Select
+                        labelId="vlg"
+                        id="vlg"
+                        label="Select VLG"
+                        name="vlg"
+                        value={vlgId}
+                        onChange={handleChange}
+                        required
+                    >
+                        {data.map((data) => {
+                            if (data.status.value === "Active") {
+                                return (
+                                    <MenuItem key={data.id} value={data.id}>
+                                        {data.name}
+                                    </MenuItem>
+                                );
+                            }
+                            return null;
+                        })}
+                    </Select>
+                </FormControl>
+                <Button
+                    sx={{ bgcolor: "black", color: "white" }}
+                    type="submit"
+                    variant="contained"
+                >
+                    Continue
+                </Button>
+                {/* <select
                     name="vlg"
                     id="vlg"
                     className="border rounded border-gray-400 mb-2 px-2 py-1"
@@ -31,7 +73,7 @@ const VlgCheckForm = () => {
                 </select>
                 <button className="border bg-black text-white rounded hover:opacity-50 active:opacity-75 py-1 px-2 mb-2">
                     Continue
-                </button>
+                </button> */}
             </Form>
         </div>
     );
