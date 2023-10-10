@@ -75,8 +75,19 @@ const VlgCheckForm = () => {
     // const [vlgId, setVlgId] = useState("");
     function CustomToolbar() {
         return (
-            <GridToolbarContainer>
-                <GridToolbarQuickFilter sx={{ margin: "20px 10px" }} />
+            <GridToolbarContainer
+                sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    margin: "0 10px",
+                }}
+            >
+                <h3 className="text-xl font-bold">Select VLG</h3>
+                <GridToolbarQuickFilter
+                    sx={{
+                        margin: "20px 0",
+                    }}
+                />
             </GridToolbarContainer>
         );
     }
@@ -89,7 +100,7 @@ const VlgCheckForm = () => {
             <Link to={"/"} className="text-2xl">
                 &larr;
             </Link>
-            <h3 className="text-xl font-semibold">Please Select VLG</h3>
+
             <DataGrid
                 rows={rows}
                 columns={columns}

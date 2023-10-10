@@ -162,6 +162,14 @@ const Home = () => {
         },
     ];
 
+    // const columnGroupingModel = [
+    //     {
+    //         groupId: "",
+    //         description: "",
+    //         children: [{ field: "clientId" }],
+    //     },
+    // ];
+
     const { state } = useNavigation();
     return (
         <>
@@ -185,11 +193,14 @@ const Home = () => {
                     <Loading />
                 ) : (
                     <DataGrid
+                        experimentalFeatures={{ columnGrouping: true }}
                         rows={rows}
                         columns={columns}
                         showCellVerticalBorder
                         showColumnVerticalBorder
                         slots={actionData ? { toolbar: CustomToolbar } : {}}
+                        // columnGroupingModel={columnGroupingModel}
+                        // columnHeaderHeight={80}
                     />
                 )}
             </div>
