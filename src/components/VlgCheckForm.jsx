@@ -7,7 +7,7 @@ import {
     GridToolbarContainer,
     GridToolbarQuickFilter,
 } from "@mui/x-data-grid";
-import { Button } from "@mui/material";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
 const VlgCheckForm = () => {
     const navigate = useNavigate();
@@ -44,15 +44,11 @@ const VlgCheckForm = () => {
         {
             field: "view",
             type: "actions",
-            width: 200,
+            width: 100,
             sortable: false,
             getActions: (params) => [
                 <GridActionsCellItem
-                    icon={
-                        <Button variant="contained" sx={{ bgcolor: "gray" }}>
-                            Select
-                        </Button>
-                    }
+                    icon={<ArrowForwardIcon />}
                     label="Select"
                     onClick={() => selectVlg(params.id)}
                 />,
