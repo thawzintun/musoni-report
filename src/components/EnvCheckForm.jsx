@@ -29,11 +29,8 @@ const EnvCheckForm = () => {
 
             <Form method="post" className="grid grid-flow-row gap-y-3">
                 <FormControl variant="outlined">
-                    <InputLabel
-                        htmlFor="outlined-adornment-password"
-                        className=" text-gray-500"
-                    >
-                        Password
+                    <InputLabel id="env" className="text-gray-500">
+                        Environment Variable
                     </InputLabel>
                     <OutlinedInput
                         id="env"
@@ -55,7 +52,7 @@ const EnvCheckForm = () => {
                                 </IconButton>
                             </InputAdornment>
                         }
-                        label="Password"
+                        label="Environment Variable"
                     />
                 </FormControl>
                 {/* <input

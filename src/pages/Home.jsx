@@ -35,13 +35,13 @@ const Home = () => {
     let rowId = 0;
     actionData &&
         actionData.map((data) => {
-            console.log(data);
             if (
                 data.accountNo &&
                 data.clientId &&
                 data.status.active &&
                 data.timeline.activatedOnDate
             ) {
+                console.log(data);
                 const oneDay = 24 * 60 * 60 * 1000;
                 const diffDays = Math.round(
                     Math.abs(
@@ -63,7 +63,7 @@ const Home = () => {
                     ) * 50;
 
                 rows.push({
-                    id: rowId++,
+                    id: ++rowId,
                     clientId: data.clientId,
                     clientName: data.clientName,
                     accId: data.id,
