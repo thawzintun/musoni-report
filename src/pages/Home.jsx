@@ -9,7 +9,7 @@ import {
     GridToolbarExport,
     GridToolbarFilterButton,
 } from "@mui/x-data-grid";
-import { Button, LinearProgress, Typography } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import LinearIndeterminate from "../components/Loading";
 import CustomNoRowsOverlay from "../components/RowsOverlay";
 
