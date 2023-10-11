@@ -48,7 +48,11 @@ const VlgCheckForm = () => {
             sortable: false,
             getActions: (params) => [
                 <GridActionsCellItem
-                    icon={<ArrowForwardIcon />}
+                    icon={
+                        <ArrowForwardIcon
+                            sx={{ margin: "1rem 4rem", borderRadius: 0 }}
+                        />
+                    }
                     label="Select"
                     onClick={() => selectVlg(params.id)}
                 />,

@@ -1,20 +1,26 @@
 import React from "react";
 import { Form, redirect } from "react-router-dom";
 import { getEnv } from "../util/auth";
+import { Button, TextField } from "@mui/material";
 
 const ReportForm = () => {
     return (
         <>
             <Form method="post" className="flex gap-x-5">
-                <input
-                    type="date"
-                    name="date"
-                    id="date"
-                    className=" outline outline-1 px-3"
-                />
-                <button className=" border px-4 py-2 border-black hover:bg-gray-300 active:bg-gray-400 hover:border-gray-300 active:border-gray-400">
+                <TextField type="date" name="date" id="date" />
+                <Button
+                    variant="contained"
+                    type="submit"
+                    sx={{
+                        bgcolor: "black",
+                        color: "white",
+                        ":hover": {
+                            bgcolor: "gray",
+                        },
+                    }}
+                >
                     Run Report
-                </button>
+                </Button>
             </Form>
         </>
     );

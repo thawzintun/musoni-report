@@ -62,7 +62,13 @@ const EnvCheckForm = () => {
                     className="border rounded border-gray-400 mb-2 px-2 py-1"
                 /> */}
                 <Button
-                    sx={{ bgcolor: "black", color: "white" }}
+                    sx={{
+                        bgcolor: "black",
+                        color: "white",
+                        ":hover": {
+                            bgcolor: "gray",
+                        },
+                    }}
                     type="submit"
                     variant="contained"
                 >

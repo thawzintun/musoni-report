@@ -1,7 +1,6 @@
 import React from "react";
 import ReportForm from "../components/ReportForm";
 import { Link, useActionData, useNavigation } from "react-router-dom";
-import Loading from "../components/Loading";
 import {
     DataGrid,
     GridToolbarColumnsButton,
@@ -10,6 +9,9 @@ import {
     GridToolbarExport,
     GridToolbarFilterButton,
 } from "@mui/x-data-grid";
+import { Button, LinearProgress, Typography } from "@mui/material";
+import LinearIndeterminate from "../components/Loading";
+import CustomNoRowsOverlay from "../components/RowsOverlay";
 
 const Home = () => {
     const actionData = useActionData();
@@ -17,7 +19,7 @@ const Home = () => {
 
     function CustomToolbar() {
         return (
-            <GridToolbarContainer>
+            <GridToolbarContainer sx={{ margin: "10px" }}>
                 <GridToolbarColumnsButton />
                 <GridToolbarFilterButton />
                 <GridToolbarDensitySelector />
@@ -171,38 +173,61 @@ const Home = () => {
     // ];
 
     const { state } = useNavigation();
+
     return (
         <>
             <div className="px-3 pt-3 my-3">
-                <Link
-                    to={"/vlg"}
-                    className="bg-black text-white hover:opacity-50 active:opacity-75 px-4 py-2"
+                <Button
+                    variant="contained"
+                    sx={{
+                        bgcolor: "black",
+                        padding: "10px 25px",
+                        color: "white",
+                        ":hover": {
+                            bgcolor: "gray",
+                        },
+                    }}
                 >
-                    Back
-                </Link>
+                    <Link to={"/vlg"}>Back</Link>
+                </Button>
             </div>
-            <div className="px-3">
-                <div className="flex justify-between mb-3 py-3">
-                    <h3 className="text-3xl">
+            <div className="px-3 pb-5">
+                <div className="flex justify-between items-end mb-3 py-3">
+                    <Typography variant="h5" fontWeight={"bold"}>
                         FTD Accounts generated on {currentDate.toLocaleString()}{" "}
                         from Proximity Finance
-                    </h3>
+                    </Typography>
                     <ReportForm />
                 </div>
-                {state === "submitting" ? (
-                    <Loading />
-                ) : (
+                <div>
                     <DataGrid
+                        sx={{ height: rows.length < 1 ? 500 : "auto" }}
                         experimentalFeatures={{ columnGrouping: true }}
                         rows={rows}
                         columns={columns}
                         showCellVerticalBorder
                         showColumnVerticalBorder
-                        slots={actionData ? { toolbar: CustomToolbar } : {}}
+                        loading={state === "submitting"}
+                        initialState={{
+                            pagination: { paginationModel: { pageSize: 10 } },
+                        }}
+                        pageSizeOptions={[10, 25, 50, 100]}
+                        slots={
+                            actionData
+                                ? {
+                                      toolbar: CustomToolbar,
+                                      loadingOverlay: LinearIndeterminate,
+                                      noRowsOverlay: CustomNoRowsOverlay,
+                                  }
+                                : {
+                                      loadingOverlay: LinearIndeterminate,
+                                      noRowsOverlay: CustomNoRowsOverlay,
+                                  }
+                        }
                         // columnGroupingModel={columnGroupingModel}
                         // columnHeaderHeight={80}
                     />
-                )}
+                </div>
             </div>
         </>
     );

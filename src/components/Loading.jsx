@@ -1,17 +1,11 @@
-import React from "react";
+import * as React from "react";
+import Box from "@mui/material/Box";
+import LinearProgress from "@mui/material/LinearProgress";
 
-const Loading = () => {
+export default function LinearIndeterminate() {
     return (
-        <section className="h-screen flex justify-center items-center">
-            <div className="lds-ring">
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-            </div>
-            <span className="text-[#99999]">Please wait</span>
-        </section>
+        <Box sx={{ width: "100%" }}>
+            <LinearProgress />
+        </Box>
     );
-};
-
-export default Loading;
+}

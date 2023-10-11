@@ -18,7 +18,7 @@ const OfficeCheckForm = () => {
     };
 
     return (
-        <div className="bg-white border border-gray-200 p-10 space-y-6 rounded min-w-[20%]">
+        <div className="bg-white border border-gray-200 p-10 space-y-6 rounded min-w-[25%]">
             <h3 className="text-xl font-semibold">Please Select Your Branch</h3>
             <Form method="post" className="grid grid-flow-row gap-y-3">
                 <FormControl fullWidth>
@@ -42,7 +42,13 @@ const OfficeCheckForm = () => {
                     </Select>
                 </FormControl>
                 <Button
-                    sx={{ bgcolor: "black", color: "white" }}
+                    sx={{
+                        bgcolor: "black",
+                        color: "white",
+                        ":hover": {
+                            bgcolor: "gray",
+                        },
+                    }}
                     type="submit"
                     variant="contained"
                 >
