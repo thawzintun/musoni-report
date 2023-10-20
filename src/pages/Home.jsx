@@ -273,7 +273,7 @@ const Home = () => {
                     zIndex: (theme) => theme.zIndex.drawer + 1,
                     height: "100vh",
                 }}
-                open={state === "submitting"}
+                open={state === "submitting" || state === "loading"}
             >
                 <CircularProgress color="inherit" />
             </Backdrop>
