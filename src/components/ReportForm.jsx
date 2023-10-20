@@ -8,6 +8,7 @@ const ReportForm = () => {
         <>
             <Form method="post" className="flex gap-x-5">
                 <TextField type="date" name="date" id="date" />
+
                 <Button
                     variant="contained"
                     type="submit"
@@ -70,29 +71,53 @@ export const loader = async () => {
         return redirect("/vlg");
     }
 
-    // let url = `https://api.live.sing.musoniservices.com/v1/clients?tenantIdentifier=${token}&limit=100`;
-    // const api = "1P8Rsli9pO5cHoSpyDOeDCLH3nIQTIG85gMfxOXh";
-    // const username = "thawzintun";
-    // const password = "99999999";
-    // const basicAuth = btoa(`${username}:${password}`);
+    let groupUrl = `https://api.live.sing.musoniservices.com/v1/groups/${vlg}?tenantIdentifier=${token}`;
+    const api = "1P8Rsli9pO5cHoSpyDOeDCLH3nIQTIG85gMfxOXh";
+    const username = "thawzintun";
+    const password = "99999999";
+    const basicAuth = btoa(`${username}:${password}`);
 
-    // if (
-    //     token ===
-    //     "6f503ae9985d5328ab59bf6e8bb1ebf96f3bda79586cd42a56a90bc7bcfa9797"
-    // ) {
-    //     token = "proximityfinance";
-    //     url = `https://api.live.sing.musoniservices.com/v1/clients?tenantIdentifier=${token}&limit=100`;
-    // }
-    // const response = await fetch(url, {
-    //     method: "GET", // You can specify the HTTP method (GET in this case)
-    //     headers: {
-    //         Authorization: "Basic " + basicAuth, // Note the space after "Basic"
-    //         "Content-Type": "application/json",
-    //         "x-api-key": api,
-    //     },
+    if (
+        token ===
+        "6f503ae9985d5328ab59bf6e8bb1ebf96f3bda79586cd42a56a90bc7bcfa9797"
+    ) {
+        token = "proximityfinance";
+        groupUrl = `https://api.live.sing.musoniservices.com/v1/groups/${vlg}?tenantIdentifier=${token}`;
+    }
+
+    const groupResponse = await fetch(groupUrl, {
+        method: "GET", // You can specify the HTTP method (GET in this case)
+        headers: {
+            Authorization: "Basic " + basicAuth, // Note the space after "Basic"
+            "Content-Type": "application/json",
+            "x-api-key": api,
+        },
+    });
+
+    const groupData = await groupResponse.json();
+    const groupName = groupData.name;
+
+    let url = `https://api.live.sing.musoniservices.com/v1/clients?tenantIdentifier=${token}&search=${groupName}`;
+
+    const response = await fetch(url, {
+        method: "GET", // You can specify the HTTP method (GET in this case)
+        headers: {
+            Authorization: "Basic " + basicAuth, // Note the space after "Basic"
+            "Content-Type": "application/json",
+            "x-api-key": api,
+        },
+    });
+
+    const data = await response.json();
+
+    // const clientData = data.pageItems;
+
+    // const finalData = clientData.filter((data) => {
+    //     return data.id > 10000;
     // });
-
-    // const data = await response.json();
-    // console.log(data);
-    return null;
+    return {
+        clients: data.pageItems,
+        groupName: groupData.name,
+        staffName: groupData.staffName,
+    };
 };

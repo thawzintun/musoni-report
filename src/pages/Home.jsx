@@ -1,6 +1,11 @@
 import React from "react";
 import ReportForm from "../components/ReportForm";
-import { Link, useActionData, useNavigation } from "react-router-dom";
+import {
+    Link,
+    useActionData,
+    useLoaderData,
+    useNavigation,
+} from "react-router-dom";
 import {
     DataGrid,
     GridToolbarColumnsButton,
@@ -9,13 +14,24 @@ import {
     GridToolbarExport,
     GridToolbarFilterButton,
 } from "@mui/x-data-grid";
-import { Button, Typography } from "@mui/material";
-import LinearIndeterminate from "../components/Loading";
+import { Backdrop, Button, CircularProgress, Typography } from "@mui/material";
 import CustomNoRowsOverlay from "../components/RowsOverlay";
 
 const Home = () => {
+    const { clients, groupName, staffName } = useLoaderData();
+
     const actionData = useActionData();
     var currentDate = new Date();
+
+    const filteredData =
+        actionData &&
+        actionData.filter((data) => {
+            const newData = clients.find((d) => {
+                return data.clientId === d.id;
+            });
+            // console.log(newData);
+            return newData;
+        });
 
     function CustomToolbar() {
         return (
@@ -35,15 +51,14 @@ const Home = () => {
 
     let rows = [];
     let rowId = 0;
-    actionData &&
-        actionData.map((data) => {
+    filteredData &&
+        filteredData.map((data) => {
             if (
                 data.accountNo &&
                 data.clientId &&
                 data.status.active &&
                 data.timeline.activatedOnDate
             ) {
-                console.log(data);
                 const oneDay = 24 * 60 * 60 * 1000;
                 const diffDays = Math.round(
                     Math.abs(
@@ -164,13 +179,38 @@ const Home = () => {
         },
     ];
 
-    // const columnGroupingModel = [
-    //     {
-    //         groupId: "",
-    //         description: "",
-    //         children: [{ field: "clientId" }],
-    //     },
-    // ];
+    const columnGroupingModel = [
+        {
+            groupId: "ကျေးရွာအုပ်စု",
+            description: "",
+            children: [
+                {
+                    groupId: "ချေးငွေအရာရှိ",
+                    children: [
+                        {
+                            groupId: " ",
+                            children: [{ field: "clientId" }],
+                        },
+                    ],
+                },
+            ],
+        },
+        {
+            groupId: groupName,
+            description: "",
+            children: [
+                {
+                    groupId: staffName,
+                    children: [
+                        {
+                            groupId: "  ",
+                            children: [{ field: "clientName" }],
+                        },
+                    ],
+                },
+            ],
+        },
+    ];
 
     const { state } = useNavigation();
 
@@ -205,9 +245,10 @@ const Home = () => {
                         experimentalFeatures={{ columnGrouping: true }}
                         rows={rows}
                         columns={columns}
+                        checkboxSelection
+                        disableRowSelectionOnClick
                         showCellVerticalBorder
                         showColumnVerticalBorder
-                        loading={state === "submitting"}
                         initialState={{
                             pagination: { paginationModel: { pageSize: 10 } },
                         }}
@@ -216,19 +257,26 @@ const Home = () => {
                             actionData
                                 ? {
                                       toolbar: CustomToolbar,
-                                      loadingOverlay: LinearIndeterminate,
                                       noRowsOverlay: CustomNoRowsOverlay,
                                   }
                                 : {
-                                      loadingOverlay: LinearIndeterminate,
                                       noRowsOverlay: CustomNoRowsOverlay,
                                   }
                         }
-                        // columnGroupingModel={columnGroupingModel}
-                        // columnHeaderHeight={80}
+                        columnGroupingModel={columnGroupingModel}
                     />
                 </div>
             </div>
+            <Backdrop
+                sx={{
+                    color: "#fff",
+                    zIndex: (theme) => theme.zIndex.drawer + 1,
+                    height: "100vh",
+                }}
+                open={state === "submitting"}
+            >
+                <CircularProgress color="inherit" />
+            </Backdrop>
         </>
     );
 };

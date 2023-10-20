@@ -1,6 +1,8 @@
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import {
+    Backdrop,
     Button,
+    CircularProgress,
     FormControl,
     IconButton,
     InputAdornment,
@@ -9,9 +11,10 @@ import {
 } from "@mui/material";
 import { SHA256 } from "crypto-js";
 import React from "react";
-import { Form, redirect, useActionData } from "react-router-dom";
+import { Form, redirect, useActionData, useNavigation } from "react-router-dom";
 const EnvCheckForm = () => {
     const message = useActionData();
+    const { state } = useNavigation();
 
     const [showPassword, setShowPassword] = React.useState(false);
 
@@ -22,61 +25,75 @@ const EnvCheckForm = () => {
     };
 
     return (
-        <div className="bg-white border border-gray-200 p-10 space-y-6 rounded">
-            <h3 className="text-xl font-semibold">
-                Please Enter Environment Variable
-            </h3>
+        <>
+            <div className="bg-white border border-gray-200 p-10 space-y-6 rounded">
+                <h3 className="text-xl font-semibold">
+                    Please Enter Environment Variable
+                </h3>
 
-            <Form method="post" className="grid grid-flow-row gap-y-3">
-                <FormControl variant="outlined">
-                    <InputLabel id="env" className="text-gray-500">
-                        Environment Variable
-                    </InputLabel>
-                    <OutlinedInput
-                        id="env"
-                        name="env"
-                        type={showPassword ? "text" : "password"}
-                        endAdornment={
-                            <InputAdornment position="end">
-                                <IconButton
-                                    aria-label="toggle password visibility"
-                                    onClick={handleClickShowPassword}
-                                    onMouseDown={handleMouseDownPassword}
-                                    edge="end"
-                                >
-                                    {showPassword ? (
-                                        <VisibilityOff />
-                                    ) : (
-                                        <Visibility />
-                                    )}
-                                </IconButton>
-                            </InputAdornment>
-                        }
-                        label="Environment Variable"
-                    />
-                </FormControl>
-                {/* <input
+                <Form method="post" className="grid grid-flow-row gap-y-3">
+                    <FormControl variant="outlined">
+                        <InputLabel id="env" className="text-gray-500">
+                            Environment Variable
+                        </InputLabel>
+                        <OutlinedInput
+                            id="env"
+                            name="env"
+                            type={showPassword ? "text" : "password"}
+                            endAdornment={
+                                <InputAdornment position="end">
+                                    <IconButton
+                                        aria-label="toggle password visibility"
+                                        onClick={handleClickShowPassword}
+                                        onMouseDown={handleMouseDownPassword}
+                                        edge="end"
+                                    >
+                                        {showPassword ? (
+                                            <VisibilityOff />
+                                        ) : (
+                                            <Visibility />
+                                        )}
+                                    </IconButton>
+                                </InputAdornment>
+                            }
+                            label="Environment Variable"
+                        />
+                    </FormControl>
+                    {/* <input
                     type="password"
                     name="env"
                     id="env"
                     className="border rounded border-gray-400 mb-2 px-2 py-1"
                 /> */}
-                <Button
-                    sx={{
-                        bgcolor: "black",
-                        color: "white",
-                        ":hover": {
-                            bgcolor: "gray",
-                        },
-                    }}
-                    type="submit"
-                    variant="contained"
-                >
-                    Continue
-                </Button>
-                {message && <small className="text-red-500">{message}</small>}
-            </Form>
-        </div>
+                    <Button
+                        sx={{
+                            bgcolor: "black",
+                            color: "white",
+                            ":hover": {
+                                bgcolor: "gray",
+                            },
+                        }}
+                        type="submit"
+                        variant="contained"
+                    >
+                        Continue
+                    </Button>
+                    {message && (
+                        <small className="text-red-500">{message}</small>
+                    )}
+                </Form>
+            </div>
+            <Backdrop
+                sx={{
+                    color: "#fff",
+                    zIndex: (theme) => theme.zIndex.drawer + 1,
+                    height: "100vh",
+                }}
+                open={state === "loading"}
+            >
+                <CircularProgress color="inherit" />
+            </Backdrop>
+        </>
     );
 };
 

@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { getEnv } from "../util/auth";
-import { Form, redirect, useLoaderData } from "react-router-dom";
+import { Form, redirect, useLoaderData, useNavigation } from "react-router-dom";
 import {
+    Backdrop,
     Button,
+    CircularProgress,
     FormControl,
     InputLabel,
     MenuItem,
@@ -12,49 +14,52 @@ import {
 const OfficeCheckForm = () => {
     const data = useLoaderData();
     const [officeId, setOfficeId] = useState("");
-
+    const { state } = useNavigation();
     const handleChange = (e) => {
         setOfficeId(e.target.value);
     };
 
     return (
-        <div className="bg-white border border-gray-200 p-10 space-y-6 rounded min-w-[25%]">
-            <h3 className="text-xl font-semibold">Please Select Your Branch</h3>
-            <Form method="post" className="grid grid-flow-row gap-y-3">
-                <FormControl fullWidth>
-                    <InputLabel id="office">Select Branch</InputLabel>
-                    <Select
-                        labelId="office"
-                        id="office"
-                        label="Select Branch"
-                        name="office"
-                        value={officeId}
-                        onChange={handleChange}
-                        required
+        <>
+            <div className="bg-white border border-gray-200 p-10 space-y-6 rounded min-w-[23%]">
+                <h3 className="text-xl font-semibold">
+                    Please Select Your Branch
+                </h3>
+                <Form method="post" className="grid grid-flow-row gap-y-3">
+                    <FormControl fullWidth>
+                        <InputLabel id="office">Select Branch</InputLabel>
+                        <Select
+                            labelId="office"
+                            id="office"
+                            label="Select Bnch"
+                            name="office"
+                            value={officeId}
+                            onChange={handleChange}
+                            required
+                        >
+                            {data.map((data) => {
+                                return (
+                                    <MenuItem key={data.id} value={data.id}>
+                                        {data.name}
+                                    </MenuItem>
+                                );
+                            })}
+                        </Select>
+                    </FormControl>
+                    <Button
+                        sx={{
+                            bgcolor: "black",
+                            color: "white",
+                            ":hover": {
+                                bgcolor: "gray",
+                            },
+                        }}
+                        type="submit"
+                        variant="contained"
                     >
-                        {data.map((data) => {
-                            return (
-                                <MenuItem key={data.id} value={data.id}>
-                                    {data.name}
-                                </MenuItem>
-                            );
-                        })}
-                    </Select>
-                </FormControl>
-                <Button
-                    sx={{
-                        bgcolor: "black",
-                        color: "white",
-                        ":hover": {
-                            bgcolor: "gray",
-                        },
-                    }}
-                    type="submit"
-                    variant="contained"
-                >
-                    Continue
-                </Button>
-                {/* <select
+                        Continue
+                    </Button>
+                    {/* <select
                     name="office"
                     id="office"
                     className="border rounded border-gray-400 mb-2 px-2 py-1"
@@ -69,11 +74,22 @@ const OfficeCheckForm = () => {
                         );
                     })}
                 </select> */}
-                {/* <button className="border bg-black text-white rounded hover:opacity-50 active:opacity-75 py-1 px-2 mb-2">
+                    {/* <button className="border bg-black text-white rounded hover:opacity-50 active:opacity-75 py-1 px-2 mb-2">
                     Continue
                 </button> */}
-            </Form>
-        </div>
+                </Form>
+            </div>
+            <Backdrop
+                sx={{
+                    color: "#fff",
+                    zIndex: (theme) => theme.zIndex.drawer + 1,
+                    height: "100vh",
+                }}
+                open={state === "loading"}
+            >
+                <CircularProgress color="inherit" />
+            </Backdrop>
+        </>
     );
 };
 
