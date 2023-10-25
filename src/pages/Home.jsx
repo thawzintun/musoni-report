@@ -241,7 +241,7 @@ const Home = () => {
                 </div>
                 <div>
                     <DataGrid
-                        sx={{ height: rows.length < 1 ? 500 : "auto" }}
+                        sx={{ height: rows.length < 1 ? 800 : "auto" }}
                         experimentalFeatures={{ columnGrouping: true }}
                         rows={rows}
                         columns={columns}
