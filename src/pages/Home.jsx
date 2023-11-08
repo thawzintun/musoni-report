@@ -6,20 +6,22 @@ import {
     useLoaderData,
     useNavigation,
 } from "react-router-dom";
+import { DataGrid } from "@mui/x-data-grid";
 import {
-    DataGrid,
-    GridToolbarColumnsButton,
-    GridToolbarContainer,
-    GridToolbarDensitySelector,
-    GridToolbarExport,
-    GridToolbarFilterButton,
-} from "@mui/x-data-grid";
-import { Backdrop, Button, CircularProgress, Typography } from "@mui/material";
+    Backdrop,
+    Box,
+    Button,
+    CircularProgress,
+    Typography,
+} from "@mui/material";
 import CustomNoRowsOverlay from "../components/RowsOverlay";
+import columnGroupingModel from "../components/columnGroupingModel";
+import CustomToolbar from "../components/CustomToolbar";
+import { column } from "../components/columns";
+import rows from "../components/rows";
 
 const Home = () => {
     const { clients, groupName, staffName } = useLoaderData();
-
     const actionData = useActionData();
     var currentDate = new Date();
 
@@ -33,186 +35,9 @@ const Home = () => {
             return newData;
         });
 
-    function CustomToolbar() {
-        return (
-            <GridToolbarContainer sx={{ margin: "10px" }}>
-                <GridToolbarColumnsButton />
-                <GridToolbarFilterButton />
-                <GridToolbarDensitySelector />
-                <GridToolbarExport
-                    csvOptions={{
-                        fileName: "FTD Report",
-                        utf8WithBom: true,
-                    }}
-                />
-            </GridToolbarContainer>
-        );
-    }
-
-    let rows = [];
-    let rowId = 0;
-    filteredData &&
-        filteredData.map((data) => {
-            if (
-                data.accountNo &&
-                data.clientId &&
-                data.status.active &&
-                data.timeline.activatedOnDate
-            ) {
-                const oneDay = 24 * 60 * 60 * 1000;
-                const diffDays = Math.round(
-                    Math.abs(
-                        (new Date(data.maturityDate) - currentDate) / oneDay
-                    )
-                );
-                const futureInterest =
-                    (((data.nominalAnnualInterestRate / 100) *
-                        data.summary.accountBalance) /
-                        365) *
-                    diffDays;
-                const expSavReturnManual =
-                    Math.round(
-                        parseInt(
-                            data.summary.totalDeposits +
-                                data.summary.totalInterestEarned +
-                                futureInterest
-                        ) / 50
-                    ) * 50;
-
-                rows.push({
-                    id: ++rowId,
-                    clientId: data.clientId,
-                    clientName: data.clientName,
-                    accId: data.id,
-                    accountNo: data.accountNo,
-                    depositProductName: data.depositProductName,
-                    value: data.status.value,
-                    activatedOnDate: new Date(
-                        data.timeline.activatedOnDate
-                    ).toLocaleString(),
-                    maturityDate: new Date(data.maturityDate).toLocaleString(),
-                    nominalAnnualInterestRate: data.nominalAnnualInterestRate,
-                    accountBalance: data.summary.accountBalance,
-                    totalDeposits: data.summary.totalDeposits,
-                    totalInterestEarned: data.summary.totalInterestEarned
-                        ? data.summary.totalInterestEarned
-                        : "-",
-                    totalInterestPosted: data.summary.totalInterestPosted
-                        ? data.summary.totalInterestPosted
-                        : "-",
-                    diffDays: diffDays,
-                    expSavReturnManual: expSavReturnManual
-                        ? expSavReturnManual
-                        : "-",
-                });
-            }
-            return null;
-        });
-
-    const columns = [
-        {
-            field: "clientId",
-            headerName: "Client ID",
-            width: 130,
-        },
-        {
-            field: "clientName",
-            headerName: "Client Name",
-            width: 250,
-        },
-        {
-            field: "accId",
-            headerName: "Account ID",
-            width: 150,
-        },
-        {
-            field: "accountNo",
-            headerName: "Account No",
-            width: 150,
-        },
-        {
-            field: "depositProductName",
-            headerName: "Product Name",
-            width: 350,
-        },
-        {
-            field: "value",
-            headerName: "Account Status",
-            width: 170,
-        },
-        {
-            field: "activatedOnDate",
-            headerName: "Activation Date/Approved Date",
-            width: 270,
-        },
-        {
-            field: "maturityDate",
-            headerName: "Expected Maturity Date",
-            width: 270,
-        },
-        {
-            field: "nominalAnnualInterestRate",
-            headerName: "Interest Rate",
-            width: 150,
-        },
-        { field: "accountBalance", headerName: "Account Balance", width: 180 },
-        { field: "totalDeposits", headerName: "Total Deposit", width: 170 },
-        {
-            field: "totalInterestEarned",
-            headerName: "Total Interest Earned",
-            width: 170,
-        },
-        {
-            field: "totalInterestPosted",
-            headerName: "Total Interest Posted",
-            width: 170,
-        },
-        {
-            field: "diffDays",
-            headerName: "Will be matrued in (days)",
-            width: 200,
-        },
-        {
-            field: "expSavReturnManual",
-            headerName: "Expected Savings Return Manual",
-            width: 270,
-        },
-    ];
-
-    const columnGroupingModel = [
-        {
-            groupId: "ကျေးရွာအုပ်စု",
-            description: "",
-            children: [
-                {
-                    groupId: "ချေးငွေအရာရှိ",
-                    children: [
-                        {
-                            groupId: " ",
-                            children: [{ field: "clientId" }],
-                        },
-                    ],
-                },
-            ],
-        },
-        {
-            groupId: groupName,
-            description: "",
-            children: [
-                {
-                    groupId: staffName,
-                    children: [
-                        {
-                            groupId: "  ",
-                            children: [{ field: "clientName" }],
-                        },
-                    ],
-                },
-            ],
-        },
-    ];
-
     const { state } = useNavigation();
+
+    const row = filteredData && rows(filteredData);
 
     return (
         <>
@@ -239,12 +64,14 @@ const Home = () => {
                     </Typography>
                     <ReportForm />
                 </div>
-                <div>
+                <Box>
                     <DataGrid
-                        sx={{ height: rows.length < 1 ? 800 : "auto" }}
+                        sx={{
+                            height: row && row.length > 1 ? "auto" : 800,
+                        }}
                         experimentalFeatures={{ columnGrouping: true }}
-                        rows={rows}
-                        columns={columns}
+                        rows={rows(filteredData)}
+                        columns={column}
                         checkboxSelection
                         disableRowSelectionOnClick
                         showCellVerticalBorder
@@ -263,9 +90,12 @@ const Home = () => {
                                       noRowsOverlay: CustomNoRowsOverlay,
                                   }
                         }
-                        columnGroupingModel={columnGroupingModel}
+                        columnGroupingModel={columnGroupingModel(
+                            groupName,
+                            staffName
+                        )}
                     />
-                </div>
+                </Box>
             </div>
             <Backdrop
                 sx={{
