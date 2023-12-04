@@ -3,10 +3,6 @@ const numberType = {
     cellClassName: "font-tabular-nums",
 };
 
-const dateType = {
-    type: "date",
-};
-
 export const column = [
     {
         field: "clientId",
