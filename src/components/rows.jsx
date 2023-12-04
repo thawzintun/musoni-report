@@ -1,14 +1,16 @@
 const rows = (filteredData) => {
     var currentDate = new Date();
-    let row = [];
     let rowId = 0;
+    let row = [];
     filteredData &&
         filteredData.map((data) => {
             if (
-                data.accountNo &&
-                data.clientId &&
-                data.status.active &&
-                data.timeline.activatedOnDate
+                (data.accountNo &&
+                    data.clientId &&
+                    // data.status.active &&
+                    data.timeline.activatedOnDate &&
+                    data.status.active) ||
+                data.status.value === "Matured"
             ) {
                 const oneDay = 24 * 60 * 60 * 1000;
                 const diffDays = Math.round(
@@ -29,29 +31,28 @@ const rows = (filteredData) => {
                                 futureInterest
                         ) / 50
                     ) * 50;
+                const returnAmt =
+                    Math.round(
+                        parseInt(
+                            data.summary.totalInterestEarned + futureInterest
+                        ) / 50
+                    ) * 50;
 
                 row.push({
                     id: ++rowId,
                     clientId: data.clientId,
                     clientName: data.clientName,
-                    accId: data.id,
                     accountNo: data.accountNo,
                     depositProductName: data.depositProductName,
-                    value: data.status.value,
+                    // value: data.status.value,
                     activatedOnDate: new Date(
                         data.timeline.activatedOnDate
-                    ).toLocaleString(),
-                    maturityDate: new Date(data.maturityDate).toLocaleString(),
-                    nominalAnnualInterestRate: data.nominalAnnualInterestRate,
-                    accountBalance: data.summary.accountBalance,
+                    ).toLocaleDateString("en-GB"),
+                    maturityDate: new Date(
+                        data.maturityDate
+                    ).toLocaleDateString("en-GB"),
                     totalDeposits: data.summary.totalDeposits,
-                    totalInterestEarned: data.summary.totalInterestEarned
-                        ? data.summary.totalInterestEarned
-                        : "-",
-                    totalInterestPosted: data.summary.totalInterestPosted
-                        ? data.summary.totalInterestPosted
-                        : "-",
-                    diffDays: diffDays,
+                    returnAmt: returnAmt,
                     expSavReturnManual: expSavReturnManual
                         ? expSavReturnManual
                         : "-",

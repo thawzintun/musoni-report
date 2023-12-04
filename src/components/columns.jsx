@@ -1,3 +1,12 @@
+const numberType = {
+    type: "number",
+    cellClassName: "font-tabular-nums",
+};
+
+const dateType = {
+    type: "date",
+};
+
 export const column = [
     {
         field: "clientId",
@@ -6,69 +15,57 @@ export const column = [
     },
     {
         field: "clientName",
-        headerName: "Client Name",
+        headerName: "အမည် (Name)",
         width: 250,
     },
     {
-        field: "accId",
-        headerName: "Account ID",
-        width: 150,
-    },
-    {
         field: "accountNo",
-        headerName: "Account No",
-        width: 222,
+        headerName: "Savings ID",
+        width: 150,
     },
     {
         field: "depositProductName",
         headerName: "Product Name",
         width: 350,
     },
-    {
-        field: "value",
-        headerName: "Account Status",
-        width: 170,
-    },
+    // {
+    //     field: "value",
+    //     headerName: "Account Status",
+    //     width: 170,
+    // },
     {
         field: "activatedOnDate",
-        headerName: "Activation Date/Approved Date",
-        width: 270,
+        headerName: "စာရင်းဖွင့်သည့်နေ့ (Open Date)",
+        width: 230,
+        cellClassName: "MuiDataGrid-cell--textRight",
     },
     {
         field: "maturityDate",
-        headerName: "Expected Maturity Date",
+        headerName: "သက်တမ်းပြည့်သည့်နေ့ (Maturity Date)",
         width: 270,
+        cellClassName: "MuiDataGrid-cell--textRight",
     },
     {
-        field: "nominalAnnualInterestRate",
-        headerName: "Interest Rate",
-        width: 150,
-    },
-    { field: "accountBalance", headerName: "Account Balance", width: 180 },
-    { field: "totalDeposits", headerName: "Total Deposit", width: 170 },
-    {
-        field: "totalInterestEarned",
-        headerName: "Total Interest Earned",
-        width: 170,
-    },
-    {
-        field: "totalInterestPosted",
-        headerName: "Total Interest Posted",
-        width: 170,
-    },
-    {
-        field: "diffDays",
-        headerName: "Will be matrued in (days)",
+        field: "totalDeposits",
+        headerName: "ငွေရင်းပမာဏ (Deposit)",
         width: 200,
+        ...numberType,
+    },
+    {
+        field: "returnAmt",
+        headerName: "အတိုး (Interest)",
+        width: 150,
+        ...numberType,
     },
     {
         field: "expSavReturnManual",
-        headerName: "Expected Savings Return Manual",
-        width: 270,
+        headerName: "ထုတ်ပေးသည့်ပမာဏ (Total Return Amount)",
+        width: 300,
+        ...numberType,
     },
     {
         field: "signature",
-        headerName: "Signature",
-        width: 200,
+        headerName: "ငွေထုတ်သူလက်မှတ် (Withdrawer's Signature)",
+        width: 350,
     },
 ];

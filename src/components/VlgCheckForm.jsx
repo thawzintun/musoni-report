@@ -70,7 +70,6 @@ const VlgCheckForm = () => {
     data &&
         data.map((data) => {
             if (data.status.value === "Active") {
-                console.log(data);
                 return rows.push({
                     id: data.id,
                     groupName: data.name,
@@ -136,7 +135,6 @@ const VlgCheckForm = () => {
                         required
                     >
                         {data.map((data) => {
-                            console.log(data);
                             if (data.status.value === "Active") {
                                 return (
                                     <MenuItem key={data.id} value={data.id}>

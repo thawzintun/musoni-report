@@ -20,7 +20,8 @@ const columnGroupingModel = (groupName, staffName) => {
                                             children: [
                                                 {
                                                     groupId: "0000",
-                                                    headerName: " ",
+                                                    headerName:
+                                                        "ငွေထုတ်သည့်နေ့",
                                                     children: [
                                                         { field: "clientId" },
                                                     ],
@@ -156,15 +157,18 @@ const columnGroupingModel = (groupName, staffName) => {
                             children: [
                                 {
                                     groupId: "44",
-                                    headerName: " ",
+                                    headerName:
+                                        "ချေးငွေအရာရှိလက်မှတ် (LO's Signature)",
                                     children: [
                                         {
                                             groupId: "444",
-                                            headerName: " ",
+                                            headerName:
+                                                "အကူချေးငွေအရာရှိလက်မှတ် (Helper LO's signature)",
                                             children: [
                                                 {
                                                     groupId: "4444",
-                                                    headerName: "",
+                                                    headerName:
+                                                        "ထုတ်ယူငွေစုစုပေါင်း",
                                                     children: [
                                                         {
                                                             field: "depositProductName",

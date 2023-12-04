@@ -38,11 +38,17 @@ const OfficeCheckForm = () => {
                             required
                         >
                             {data.map((data) => {
-                                return (
-                                    <MenuItem key={data.id} value={data.id}>
-                                        {data.name}
-                                    </MenuItem>
-                                );
+                                if (
+                                    data.name !== "Staff Loan" &&
+                                    data.name !== "Head Office"
+                                ) {
+                                    return (
+                                        <MenuItem key={data.id} value={data.id}>
+                                            {data.name}
+                                        </MenuItem>
+                                    );
+                                }
+                                return null;
                             })}
                         </Select>
                     </FormControl>
